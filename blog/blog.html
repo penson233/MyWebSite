@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/music.css">
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_1977030_x8vo8ktj6pd.css">
+    <script src="./js/click.js"></script>
+</head>
+
+<body>
+
+    <div class="music">
+        <audio src="./mp3/lihua.mp3" loop="loop"></audio>
+        <div class="img">
+            <div class="start"><i class="iconfont iconbofang"></i></div>
+            <div class="stop"><i class="iconfont iconbofang1"></i></div>
+        </div>
+        <h2>梨花香-霜雪千年--等什么君</h2>
+        <div class="box">
+            <div class="begin"></div>
+            <div class="end"></div>
+            <div class="gundong">
+                <div class="gun"><i id="gun" class='iconfont iconcircleyuanquan'></i></div>
+                <div class="tiao">
+                    <div class="jindu"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        //音乐播放器实现
+        var start = document.querySelector('.start');
+        var stoped = document.querySelector('.stop');
+        var audio = document.querySelector('audio');
+
+
+
+        var begin = document.querySelector('.begin');
+        var end = document.querySelector('.end');
+        var jindu = document.querySelector('.jindu');
+        var tiao = document.querySelector('.tiao');
+
+
+
+        var timer = null;
+
+        var kaishi = false;
+        start.addEventListener('click', function() {
+            start.style.transform = 'rotate(90deg)';
+            stoped.style.transform = 'rotate(0)';
+            audio.play();
+            kaishi = true;
+            var en_time = parseInt(audio.duration);
+            end.innerHTML = '0:' + en_time;
+            var timer = setInterval(function() {
+                var be_time = parseInt(audio.currentTime);
+                be_time = be_time < 10 ? '0' + be_time : be_time;
+                begin.innerHTML = '0:' + be_time;
+
+                var jindu_width = (tiao.clientWidth - 10) * be_time / en_time;
+                jindu.style.width = jindu_width + 'px';
+                gun.style.left = jindu_width + 'px';
+            }, 1000)
+
+        })
+
+
+
+        stoped.addEventListener('click', function() {
+            stoped.style.transform = 'rotate(-90deg)';
+            start.style.transform = 'rotate(0)';
+            audio.pause();
+            kaishi = false;
+            clearInterval(timer);
+        })
+
+
+
+        end.innerHTML = '0:58';
+        begin.innerHTML = '0:00';
+
+
+        var box = document.querySelector('.box');
+        var gun = document.querySelector('.box .gun');
+        var gundong = document.querySelector('.box .gundong');
+        box.addEventListener('mouseover', function(e) {
+            x = e.clientX - box.offsetLeft;
+        })
+
+        var flag = false;
+        box.addEventListener('mousedown', function(e) {
+            flag = true;
+            if (flag) {
+                x_gun = e.clientX - box.offsetLeft;
+                if (kaishi) {
+                    if (x_gun >= 95) {
+                        x_gun = 95;
+                    }
+                    if (x_gun <= 3) {
+                        x_gun = 3;
+                    }
+                    x_gun = x_gun - gun.offsetWidth / 2;
+                    gun.style.left = x_gun + 'px';
+                    jindu.style.width = x_gun + 'px';
+                }
+            }
+        })
+        box.addEventListener('mouseup', function() {
+            flag = false;
+            if (kaishi) {
+                audio.currentTime = x_gun * 58 / 95;
+            }
+        })
+        var x_gun = '';
+        gundong.addEventListener('mousemove', function(e) {
+            if (flag) {
+                x_gun = e.clientX - box.offsetLeft;
+                if (kaishi) {
+                    if (x_gun >= 95) {
+                        x_gun = 95;
+                    }
+                    if (x_gun <= 3) {
+                        x_gun = 3;
+                    }
+                    x_gun = x_gun - gun.offsetWidth / 2;
+                    gun.style.left = x_gun + 'px';
+                    jindu.style.width = x_gun + 'px';
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>
